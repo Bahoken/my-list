@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Achats</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" integrity="sha512-10/jx2EXwxxWqCLX/hHth/vu2KY3jCF70dCQB8TSgNjbCVAC/8vai53GfMDrO2Emgwccf2pJqxct9ehpzG+MTw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            background-color: azure;
+        }
+        .card {
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <header class="bg-gray-800 text-white p-4 text-center justify-center flex items-center gap-2">
+        <i class="fas fa-cart-shopping !text-2xl"></i>
+        <h1 class="text-2xl">Liste des Achats</h1>
+    </header>
+
+    <main class="container mx-auto p-4" x-data="app">
+        <template x-for="(group, index) in groups" :key="index">
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold cursor-pointer my-4 bg-gray-200 p-3 rounded-md flex justify-between" @click="toggleGroup(index)">
+                    <div class="text-group">
+                        <span x-text="group.name"></span> (<span x-text="group.items.length"></span>)
+                    </div>
+                    <span class="icon transition-all">
+                        <i class="fas fa-plus text-slate-900" x-show="!group.open"></i>
+                        <i class="fas fa-minus" x-show="group.open"></i>
+                    </span>
+                    
+                </h2>
+                <div x-show="group.open" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <template x-for="item in group.items" :key="item.title">
+                        <div class="card bg-white p-4 rounded shadow-md hover:shadow-lg" >
+                            <img :src="item.image" alt="" class="w-full h-40 object-cover rounded">
+                            <h3 class="text-lg font-bold mt-2" x-text="item.title"></h3>
+                            <p class="text-gray-700">Prix: <span x-text="item.price"></span> <span x-text="item.currency"></span></p>
+                            <a :href="item.link" target="_blank" class="text-blue-600 hover:underline flex items-center mt-2">
+                                <i class="fas fa-link mr-1"></i>
+                                Lien
+                            </a>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </template>
+        
+        <div class="mt-4 flex gap-3 font-semibold">
+            <p>Total des articles: <span x-text="totalItems" class="!font-medium text-slate-400"></span></p>
+            <p>Total en EUR: <span x-text="totalEur" class="!font-medium text-blue-400"></span></p>
+            <!-- <p>Total en USD: <span x-text="totalUsd" class="!font-medium text-green-400"></span></p> -->
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white p-4 text-center">
+        <p>&copy; 2024 Liste des Achats. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        function app() {
+            return {
+                groups: [
+                    {
+                        name: 'Montres',
+                        open: false,
+                        items: [
+                            {
+                                title: 'Montre mécanique',
+                                price: 15,
+                                currency: 'EUR',
+                                link: 'https://www.temu.com/goods.html?_bg_fs=1&goods_id=601099580301858&from_share=1&share_img=https%3A%2F%2Fimg.kwcdn.com%2Fproduct%2Ffancy%2F9de8db2f-d4b1-4772-926c-e85e91480088.jpg&refer_share_id=7228102a-810f-4bf6-99ad-3494c11f&refer_share_channel=system_share&_oak_page_source=417&_oak_region=186&refer_share_suin=RSSBD334RLFRTCAADRQGA3SMQOQMZKEZHYIBVA4SLMUQYBVVDX5LXKNLDAVP7A4NSQMIAK55NA',
+                                image: 'https://img.kwcdn.com/product/fancy/9de8db2f-d4b1-4772-926c-e85e91480088.jpg'
+                            },
+                            {
+                                title: 'Montre électronique',
+                                price: 24,
+                                currency: 'EUR',
+                                link: 'https://www.temu.com/goods.html?_bg_fs=1&goods_id=601099531978211&from_share=1&share_img=https%3A%2F%2Fimg.kwcdn.com%2Fproduct%2Ffancy%2F8ceb7edf-b1dc-40d9-a871-cdf61f61a028.jpg&refer_share_id=81971591-bdec-438a-bff0-0d06ee60&refer_share_channel=system_share&_oak_page_source=417&_oak_region=186&refer_share_suin=RSSBC7DMFIVWIJJMJZQGA3SMQOQMZKEZHYIBVA4SLMUQYBVUWWNKBEI6BACHGDEDIK6INW3DWI',
+                                image: 'https://img.kwcdn.com/product/fancy/8ceb7edf-b1dc-40d9-a871-cdf61f61a028.jpg'
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Pochettes',
+                        open: false,
+                        items: [
+                            {
+                                title: 'Iphone transparente (bleue)',
+                                price: 9.47,
+                                currency: 'EUR',
+                                link: 'https://www.temu.com/es-en/luxury-magnetic-shockproof-phone-case-for--15-14--11-pro--magsafe--stand-glass-lens-protection-back-cover-g-601099644096193.html?_oak_mp_inf=EMGdi9am1ogBGhZnb29kc19xamc5bXlfcmVjb21tZW5kIImX06ikMg%3D%3D&top_gallery_url=https%3A%2F%2Fimg.kwcdn.com%2Fproduct%2Ffancy%2F81295c73-84ef-4242-a678-d192c6a3dd0f.jpg&spec_gallery_id=4358589639&refer_page_sn=10032&refer_source=10016&freesia_scene=11&_oak_freesia_scene=11&_oak_rec_ext_1=OTQ3&refer_page_el_sn=200444&_x_share_id=3ca77fec-5314-407a-9214-dccddcbd&_x_sessn_id=ivxwxauof5&refer_page_name=goods&refer_page_id=10032_1727735842555_o2vqy8uxti&is_back=1',
+                                image: 'https://img.kwcdn.com/product/fancy/81295c73-84ef-4242-a678-d192c6a3dd0f.jpg'
+                            },
+                            {
+                                title: 'Xiaomi mi 11 lite 5g (bleue ou noir)',
+                                price: 6.79,
+                                currency: 'EUR',
+                                link: 'https://www.temu.com/goods.html?_bg_fs=1&goods_id=601099600769523&from_share=1&share_img=https%3A%2F%2Fimg.kwcdn.com%2Fproduct%2Ffancy%2Fd90cc586-fde1-407f-b55e-8bb60fa09a42.jpg&refer_share_id=3ca77fec-5314-407a-9214-dccddcbd&refer_share_channel=system_share&_oak_page_source=417&_oak_region=186&refer_share_suin=RSSBA4A3XYO6WFLD7ZQGA3SMQOQMZKEZHYIBVA4SLMUQYBVVCUV2X4HQEYGCXPAFZVK4GBCLPA&_x_share_id=3ca77fec-5314-407a-9214-dccddcbd&refer_page_name=goods&refer_page_id=10032_1727736863273_ztfrr03bdv&refer_page_sn=10032&_x_sessn_id=ivxwxauof5&is_back=1',
+                                image: 'https://img.kwcdn.com/product/fancy/d90cc586-fde1-407f-b55e-8bb60fa09a42.jpg'
+                            },
+                            {
+                                title: 'Xiaomi mi 11 lite 5g transparent',
+                                price: 4.49,
+                                currency: 'EUR',
+                                link: 'https://www.temu.com/es-en/front--shockproof-case-for-xiaomi--13c-10c-poco-c65-11-mi-11-lite-5g---g-601099540069944.html?_oak_mp_inf=ELj8vaSm1ogBGiAxYzAyMjQ3OTc5OTY0MTRjOWFjMTNlMDljMzQwMTVlMCCj6KOppDI%3D&top_gallery_url=https%3A%2F%2Fimg.kwcdn.com%2Fproduct%2FFancyalgo%2FVirtualModelMatting%2F067659edd505ebe3f06e087558d32ddd.jpg&spec_gallery_id=4077911346&refer_page_sn=10009&refer_source=10051&freesia_scene=2&_oak_freesia_scene=2&_oak_rec_ext_1=NDQ5&search_key=mi%2011%20lite%20case&refer_page_el_sn=200049&_x_share_id=3ca77fec-5314-407a-9214-dccddcbd&_x_sessn_id=ivxwxauof5&refer_page_name=search_result&refer_page_id=10009_1727737166188_bzastdp82z',
+                                image: 'https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/067659edd505ebe3f06e087558d32ddd.jpg'
+                            }
+                        ]
+                    }, 
+                    {
+                        name: 'Chaussures',
+                        open: false,
+                        items: [
+                            {
+                                title: 'Canvas Sneakers (bleue, pt: 42)',
+                                price: 29.41,
+                                currency: 'EUR',
+                                link: 'https://www.shein.com/4-Seasons-New-Fashionable-Casual-Low-Top-Canvas-Sneakers-p-40212534.html?share_from=null&url_from=GM7563322023005679616&main_attr=27_118&mallCode=1',
+                                image: 'https://img.shein.com/images/20220602/6c8e1a12-8d08-4d49-ae5f-dfb953961679.jpg'
+                            },
+                            {
+                                title: 'Canvas (vans) sport (noir totalement, pt: 43)',
+                                price: 24.59,
+                                currency: 'EUR',
+                                link: 'https://www.shein.com/Men-s-New-Fashion-All-Season-Lightweight-Breathable-Shock-Absorbing-Outdoor-Casual-Canvas-Sneakers-p-42761503.html?mallCode=1&imgRatio=3-4',
+                                image: 'https://img.shein.com/images/20220415/9f4ae086-56a8-4dc7-a382-401c8ee2e6bb.jpg'
+                            },
+                            {
+                                title: 'Casual wear (gray, pt: 43)',
+                                price: 20.89,
+                                currency: 'EUR',
+                                link: 'https://www.shein.com/Men-s-Thick-Soled-Athletic-Shoes-White-Sneakers-With-Lightweight-Comfortable-Breathable-Soft-Sole-For-Casual-Wear-p-38151416.html?share_from=null&main_attr=27_447&mallCode=1',
+                                image: 'https://img.shein.com/images/20220324/2a0089dc-4d6f-4fb5-9bc7-7c0671db8b18.jpg'
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Chemises',
+                        open: false,
+                        items: [
+                            {
+                                title: 'Kimono Shirt (xl, noir)',
+                                price: 7.00,
+                                currency: 'EUR',
+                                link: 'https://www.temu.com/goods.html?_bg_fs=1&goods_id=601099516757344&from_share=1&share_img=https%3A%2F%2Fimg.kwcdn.com%2Fproduct%2FFancyalgo%2FVirtualModelMatting%2F6f33f863ca0e352ac88c9e42479203a3.jpg&refer_share_id=43c2627f-3851-4e06-9a00-0716b5ba&refer_share_channel=system_share&spec_id=3002&spec_gallery_id=315&_oak_page_source=417&_oak_region=186&refer_share_suin=RSSBBGVOETBLM7KJVJQGA3SMQOQMZKEZHYIBVA4SLMUQYBVU3BWLPXFVDM7OVXDHF2BN2CW3JI&_x_share_id=43c2627f-3851-4e06-9a00-0716b5ba&refer_page_name=goods&refer_page_id=10032_1727939364690_b0jea5c1ef&refer_page_sn=10032&_x_sessn_id=0dzxrb6w3d',
+                                image: 'https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/6f33f863ca0e352ac88c9e42479203a3.jpg'
+                            },
+                            {
+                                title: 'Kimono Shirt (xl, bleu)',
+                                price: 7.00,
+                                currency: 'EUR',
+                                link: 'https://www.temu.com/goods.html?_bg_fs=1&goods_id=601099555762493&from_share=1&share_img=https%3A%2F%2Fimg.kwcdn.com%2Fproduct%2Ffancy%2Ff615c295-c001-4d5b-b4ac-e0ba1c16a030.jpg&refer_share_id=61200b27-802f-43e7-a1f3-c2fe6220&refer_share_channel=system_share&spec_id=16086&spec_gallery_id=2732&_oak_page_source=417&_oak_region=186&refer_share_suin=RSSBDTA3ZBBIJPRSSRQGA3SMQOQMZKEZHYIBVA4SLMUQYBVVD5MXGLFBYZGN73TUURE3B6QKKQ&_x_share_id=61200b27-802f-43e7-a1f3-c2fe6220&refer_page_name=goods&refer_page_id=10032_1727939365096_s0npjm6ql5&refer_page_sn=10032&_x_sessn_id=215bkqjymg',
+                                image: 'https://img.kwcdn.com/product/fancy/f615c295-c001-4d5b-b4ac-e0ba1c16a030.jpg'
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Ensemble / jogging',
+                        open: false,
+                        items: [
+                            {
+                                title: "Men's Casual 2-Piece Outfit (xl, bleu)",
+                                price: 21.00,
+                                currency: 'EUR',
+                                link: 'https://www.temu.com/goods.html?_bg_fs=1&goods_id=601099612116930&from_share=1&share_img=https%3A%2F%2Fimg.kwcdn.com%2Fproduct%2Ffancy%2F1e13c34b-34c6-496a-8cc3-6a0ba9228378.jpg&refer_share_id=e447366b-576e-414b-b551-3ae70eac&refer_share_channel=system_share&spec_id=16091&spec_gallery_id=7522&_oak_page_source=417&_oak_region=186&refer_share_suin=RSSBCZU7VPYE6YJY3RQGA3SMQOQMZKEZHYIBVA4SLMUQYBVV2N7PDSTUAK3GMDEWFFUB2HFPCY',
+                                image: 'https://img.kwcdn.com/product/fancy/1e13c34b-34c6-496a-8cc3-6a0ba9228378.jpg'
+                            },
+                            {
+                                title: 'Block Men Casual Tracks',
+                                price: 23.00,
+                                currency: 'EUR',
+                                link: 'https://www.temu.com/es-en/2-piece--mens-casual-tracksuit-set-casual-long-sleeve-drawstring-hoodie-and-jogging-pants-set-for-gym-workout-running-spring-and-autumn-g-601099599859603.html?top_gallery_url=https%3A%2F%2Fimg.kwcdn.com%2Fproduct%2Ffancy%2F39c5c362-1394-4c52-a084-7dafe8e6e23b.jpg&spec_id=16091&spec_gallery_id=5849&refer_page_sn=10009&refer_source=0&freesia_scene=2&_oak_freesia_scene=2&_oak_rec_ext_1=MjIzOQ&_oak_mp_inf=EJOf%2F8Cm1ogBGiA5ZDZhNjgxYWI1MzY0MDYyYmVlYTEwNDdkMTk1MjJiOSDau%2F6TpTI%3D&spec_ids=16091%2C16102%2C16086%2C15067%2C3002%2C15084&search_key=joggers&refer_page_el_sn=200049&_x_share_id=8c2ef0ab-ef8f-4c58-b863-8da7927c&_x_sessn_id=x3ucg2a1ol&refer_page_name=search_result&refer_page_id=10009_1727960948574_rh8utfxevg',
+                                image: 'https://img.kwcdn.com/product/fancy/39c5c362-1394-4c52-a084-7dafe8e6e23b.jpg'
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Pantalons',
+                        open: false,
+                        items: [
+                            {
+                                title: "Men's Stylish Comfy Solid Joggers (asian xl)",
+                                price: 12.00,
+                                currency: 'EUR',
+                                link: 'https://www.temu.com/goods.html?_bg_fs=1&goods_id=601099535698452&from_share=1&share_img=https%3A%2F%2Fimg.kwcdn.com%2Fproduct%2FFancyalgo%2FVirtualModelMatting%2F9aecdff70e14054cc8681b083d9659cf.jpg&refer_share_id=8c2ef0ab-ef8f-4c58-b863-8da7927c&refer_share_channel=system_share&spec_id=1961083&spec_gallery_id=1557&_oak_page_source=417&_oak_region=186&refer_share_suin=RSSBBMCENO2RE3F2XZQGA3SMQOQMZKEZHYIBVA4SLMUQYBVVAGUFJY4GWEFZ4AVDM5HV47IMWA',
+                                image: 'https://img.kwcdn.com/product/Fancyalgo/VirtualModelMatting/9aecdff70e14054cc8681b083d9659cf.jpg'
+                            }
+                        ]
+                    }                                            
+                    // Ajoute ici d'autres groupes d'articles
+                ],
+                toggleGroup(index) {
+                    this.groups[index].open = !this.groups[index].open;
+                },
+                get totalItems() {
+                    return this.groups.reduce((total, group) => total + group.items.length, 0);
+                },
+                get totalEur() {
+                    return this.groups.reduce((total, group) => {
+                        return total + group.items.reduce((groupTotal, item) => {
+                            return item.currency === 'EUR' ? groupTotal + item.price : groupTotal;
+                        }, 0);
+                    }, 0);
+                },
+                get totalUsd() {
+                    return this.groups.reduce((total, group) => {
+                        return total + group.items.reduce((groupTotal, item) => {
+                            return item.currency === 'USD' ? groupTotal + item.price : groupTotal;
+                        }, 0);
+                    }, 0);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
